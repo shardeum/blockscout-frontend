@@ -30,10 +30,14 @@ const StatsFilters = ({
   initialFilterValue,
 }: Props) => {
 
+  const SECTION_IDS_TO_REMOVE = ['contracts', 'userOperations', 'accountAbstraction'];
+
   const options = React.useMemo(() => {
     return [
       { value: 'all', label: 'All stats' },
-      ...(sections || []).map((section) => ({ value: section.id, label: section.title })),
+      ...(sections || [])
+        .filter(section => !SECTION_IDS_TO_REMOVE.includes(section.id))
+        .map((section) => ({ value: section.id, label: section.title })),
     ];
   }, [ sections ]);
 
@@ -43,7 +47,7 @@ const StatsFilters = ({
       templateAreas={{
         base: `"section interval"
                 "input input"`,
-        lg: `"section interval input"`,
+        lg: "section interval input",
       }}
       gridTemplateColumns={{ base: 'repeat(2, minmax(0, 1fr))', lg: 'auto auto 1fr' }}
       alignItems="center"
