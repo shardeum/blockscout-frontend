@@ -9,6 +9,17 @@ import DataFetchAlert from '../shared/DataFetchAlert';
 
 const UNITS_WITHOUT_SPACE = [ 's' ];
 
+const COUNTERS_TO_REMOVE = [
+  'Number of verified contracts today',
+  'Total contracts',
+  'Total verified contracts',
+  'Total user operations',
+  'Total AA wallets',
+  'User operations',
+  'Active bundlers',
+  'Active paymasters'
+];
+
 const NumberWidgetsList = () => {
   const { data, isPlaceholderData, isError } = useApiQuery('stats_counters', {
     queryOptions: {
@@ -20,13 +31,17 @@ const NumberWidgetsList = () => {
     return <DataFetchAlert/>;
   }
 
+  const filteredCounters = data?.counters?.filter(
+    counter => !COUNTERS_TO_REMOVE.includes(counter.title)
+  );
+
   return (
     <Grid
       gridTemplateColumns={{ base: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }}
       gridGap={ 4 }
     >
       {
-        data?.counters?.map(({ id, title, value, units, description }, index) => {
+        filteredCounters?.map(({ id, title, value, units, description }, index) => {
 
           let unitsStr = '';
           if (units && UNITS_WITHOUT_SPACE.includes(units)) {

@@ -30,10 +30,14 @@ const StatsFilters = ({
   initialFilterValue,
 }: Props) => {
 
+  const SECTION_IDS_TO_REMOVE = ['contracts', 'userOperations', 'accountAbstraction'];
+
   const options = React.useMemo(() => {
     return [
       { value: 'all', label: 'All stats' },
-      ...(sections || []).map((section) => ({ value: section.id, label: section.title })),
+      ...(sections || [])
+        .filter(section => !SECTION_IDS_TO_REMOVE.includes(section.id))
+        .map((section) => ({ value: section.id, label: section.title })),
     ];
   }, [ sections ]);
 

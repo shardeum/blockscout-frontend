@@ -16,6 +16,26 @@ function isChartNameMatches(q: string, chart: stats.LineChartInfo) {
   return chart.title.toLowerCase().includes(q.toLowerCase());
 }
 
+const CHARTS_TO_REMOVE = [
+  'newVerifiedContracts', 
+  'verifiedContractsGrowth',
+  'contractsGrowth',
+  'newContracts',
+  'userOperations',
+  'aaWallets',
+  'activeBundlers',
+  'activePaymasters'
+];
+
+const CHART_TITLES_TO_REMOVE = [
+  'verified contract',
+  'contract',
+  'user operation',
+  'aa wallet',
+  'bundler',
+  'paymaster'
+];
+
 export default function useStats() {
   const router = useRouter();
 
@@ -41,14 +61,31 @@ export default function useStats() {
         router.replace({ pathname: '/stats' }, undefined, { scroll: false });
       }
     }
-  // run only when data is loaded
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ isPlaceholderData ]);
 
   const displayedCharts = React.useMemo(() => {
     return data?.sections
       ?.map((section) => {
-        const charts = section.charts.filter((chart) => isSectionMatches(section, currentSection) && isChartNameMatches(filterQuery, chart));
+        if (section.id === 'contracts' || section.id === 'userOperations' || section.id === 'accountAbstraction') {
+          return {
+            ...section,
+            charts: [],
+          };
+        }
+
+        const charts = section.charts.filter((chart) => {
+          if (CHARTS_TO_REMOVE.includes(chart.id)) {
+            return false;
+          }
+          
+          if (CHART_TITLES_TO_REMOVE.some(phrase => 
+            chart.title.toLowerCase().includes(phrase.toLowerCase()))) {
+            return false;
+          }
+          
+          return isSectionMatches(section, currentSection) && isChartNameMatches(filterQuery, chart);
+        });
 
         return {
           ...section,

@@ -55,12 +55,12 @@ const defaultColorTheme = (() => {
 const UI = Object.freeze({
   navigation: {
     logo: {
-      'default': getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_LOGO'),
-      dark: getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_LOGO_DARK'),
+      'default': '/assets/favicon/logo-explorer.png',
+      dark: '/assets/favicon/logo-explorer.png',
     },
     icon: {
-      'default': getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_ICON'),
-      dark: getExternalAssetFilePath('NEXT_PUBLIC_NETWORK_ICON_DARK'),
+      'default': '/assets/favicon/logo-icon.png',
+      dark: '/assets/favicon/logo-icon.png',
     },
     hiddenLinks,
     highlightedRoutes,
