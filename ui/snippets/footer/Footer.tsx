@@ -41,7 +41,7 @@ const Footer = () => {
       icon: 'edit' as const,
       iconSize: '16px',
       text: 'Submit an issue',
-      url: issueUrl,
+      url: 'https://github.com/shardeum/blockscout',
     },
     {
       icon: 'social/git' as const,
