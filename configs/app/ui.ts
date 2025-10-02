@@ -55,8 +55,8 @@ const defaultColorTheme = (() => {
 const UI = Object.freeze({
   navigation: {
     logo: {
-      'default': '/assets/favicon/logo-explorer.png',
-      dark: '/assets/favicon/logo-explorer.png',
+      'default': '/assets/favicon/logo-icon.png',
+      dark: '/assets/favicon/logo-icon.png',
     },
     icon: {
       'default': '/assets/favicon/logo-icon.png',
