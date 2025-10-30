@@ -95,6 +95,10 @@ const UI = Object.freeze({
   maintenanceAlert: {
     message: getEnvValue('NEXT_PUBLIC_MAINTENANCE_ALERT_MESSAGE'),
   },
+  dashboardInfoAlert: {
+    message: getEnvValue('NEXT_PUBLIC_DASHBOARD_INFO_ALERT_MESSAGE'),
+    url: getEnvValue('NEXT_PUBLIC_DASHBOARD_INFO_ALERT_URL'),
+  },
   explorers: {
     items: parseEnvJson<Array<NetworkExplorer>>(getEnvValue('NEXT_PUBLIC_NETWORK_EXPLORERS')) || [],
   },
