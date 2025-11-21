@@ -95,6 +95,22 @@ export const ADVANCED_FILTER_TYPES = [
     id: 'unstake',
     name: 'Unstake',
   },
+  {
+    id: 'cosmos_transfer',
+    name: 'Cosmos Transfer',
+  },
+  {
+    id: 'cosmos_staking',
+    name: 'Cosmos Staking',
+  },
+  {
+    id: 'cosmos_governance',
+    name: 'Cosmos Governance',
+  },
+  {
+    id: 'cosmos_ibc',
+    name: 'Cosmos IBC',
+  },
 ] as const;
 
 export const ADVANCED_FILTER_TYPES_WITH_ALL = [

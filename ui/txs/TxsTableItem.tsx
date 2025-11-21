@@ -20,9 +20,8 @@ import TxFee from 'ui/shared/tx/TxFee';
 import TxWatchListTags from 'ui/shared/tx/TxWatchListTags';
 import TxAdditionalInfo from 'ui/txs/TxAdditionalInfo';
 
-import TxTranslationType from './TxTranslationType';
-import TxType from './TxType';
 import ShardTxType from './ShardTxType';
+import TxTranslationType from './TxTranslationType';
 
 type Props = {
   tx: Transaction;
@@ -82,11 +81,15 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
         </VStack>
       </Td>
       <Td whiteSpace="nowrap">
-        { tx.method && (
-          <Tag colorScheme={ tx.method === 'Multicall' ? 'teal' : 'gray' } isLoading={ isLoading } isTruncated>
-            { tx.method }
-          </Tag>
-        ) }
+        { (() => {
+          const method = tx.method || (tx.transaction_types.includes('coin_transfer') &&
+                        !tx.transaction_types.some(t => t.startsWith('cosmos_')) ? 'send' : '');
+          return method ? (
+            <Tag colorScheme={ method === 'Multicall' ? 'teal' : 'gray' } isLoading={ isLoading } isTruncated>
+              { method }
+            </Tag>
+          ) : null;
+        })() }
       </Td>
       { showBlockInfo && (
         <Td>

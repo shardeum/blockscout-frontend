@@ -185,7 +185,11 @@ export type TransactionType = 'rootstock_remasc' |
 'contract_call' |
 'token_creation' |
 'coin_transfer' |
-'blob_transaction';
+'blob_transaction' |
+'cosmos_transfer' |
+'cosmos_staking' |
+'cosmos_governance' |
+'cosmos_ibc';
 
 export type TxsResponse = TransactionsResponseValidated | TransactionsResponsePending | BlockTransactionsResponse;
 

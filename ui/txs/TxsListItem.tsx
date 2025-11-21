@@ -20,9 +20,8 @@ import TxStatus from 'ui/shared/statusTag/TxStatus';
 import TimeAgoWithTooltip from 'ui/shared/TimeAgoWithTooltip';
 import TxFee from 'ui/shared/tx/TxFee';
 import TxWatchListTags from 'ui/shared/tx/TxWatchListTags';
-import TxAdditionalInfo from 'ui/txs/TxAdditionalInfo';
-import TxType from 'ui/txs/TxType';
 import ShardTxType from 'ui/txs/ShardTxType';
+import TxAdditionalInfo from 'ui/txs/TxAdditionalInfo';
 
 import TxTranslationType from './TxTranslationType';
 
@@ -74,20 +73,23 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
           fontSize="sm"
         />
       </Flex>
-      { tx.method && (
-        <Flex mt={ 3 }>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Method </Skeleton>
-          <Skeleton
-            isLoaded={ !isLoading }
-            color="text_secondary"
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipsis"
-          >
-            <span>{ tx.method }</span>
-          </Skeleton>
-        </Flex>
-      ) }
+      { (() => {
+        const method = tx.method || (tx.transaction_types.includes('coin_transfer') && !tx.transaction_types.some(t => t.startsWith('cosmos_')) ? 'send' : '');
+        return method ? (
+          <Flex mt={ 3 }>
+            <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Method </Skeleton>
+            <Skeleton
+              isLoaded={ !isLoading }
+              color="text_secondary"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
+              <span>{ method }</span>
+            </Skeleton>
+          </Flex>
+        ) : null;
+      })() }
       { showBlockInfo && tx.block_number !== null && (
         <Flex mt={ 2 }>
           <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Block </Skeleton>
