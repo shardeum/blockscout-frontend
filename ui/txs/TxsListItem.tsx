@@ -74,7 +74,13 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
         />
       </Flex>
       { (() => {
-        const method = tx.method || (tx.transaction_types.includes('coin_transfer') && !tx.transaction_types.some(t => t.startsWith('cosmos_')) ? 'send' : '');
+        const isCoinTransfer = tx.transaction_types.includes('coin_transfer') && !tx.transaction_types.some(t => t.startsWith('cosmos_'));
+        // Normalize coin transfer methods to 'send'
+        const rawMethod = tx.method || '';
+        const isCoinTransferMethod = [ 'send', 'Send', 'EVM Transfer', 'transfer', 'Transfer' ].includes(rawMethod);
+        const method = (isCoinTransfer || isCoinTransferMethod) && !rawMethod.includes('Multicall') ?
+          'send' :
+          rawMethod;
         return method ? (
           <Flex mt={ 3 }>
             <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Method </Skeleton>

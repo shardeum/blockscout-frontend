@@ -82,8 +82,14 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
       </Td>
       <Td whiteSpace="nowrap">
         { (() => {
-          const method = tx.method || (tx.transaction_types.includes('coin_transfer') &&
-                        !tx.transaction_types.some(t => t.startsWith('cosmos_')) ? 'send' : '');
+          const isCoinTransfer = tx.transaction_types.includes('coin_transfer') &&
+                        !tx.transaction_types.some(t => t.startsWith('cosmos_'));
+          // Normalize coin transfer methods to 'send'
+          const rawMethod = tx.method || '';
+          const isCoinTransferMethod = [ 'send', 'Send', 'EVM Transfer', 'transfer', 'Transfer' ].includes(rawMethod);
+          const method = (isCoinTransfer || isCoinTransferMethod) && !rawMethod.includes('Multicall') ?
+            'send' :
+            rawMethod;
           return method ? (
             <Tag colorScheme={ method === 'Multicall' ? 'teal' : 'gray' } isLoading={ isLoading } isTruncated>
               { method }
