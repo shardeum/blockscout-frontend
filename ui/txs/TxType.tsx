@@ -13,6 +13,10 @@ const TYPES_ORDER: Array<TransactionType> = [
   'blob_transaction',
   'rootstock_remasc',
   'rootstock_bridge',
+  'cosmos_governance',
+  'cosmos_staking',
+  'cosmos_ibc',
+  'cosmos_transfer',
   'token_creation',
   'contract_creation',
   'token_transfer',
@@ -58,6 +62,22 @@ const TxType = ({ types, isLoading }: Props) => {
     case 'rootstock_bridge':
       label = 'Bridge';
       colorScheme = 'blue';
+      break;
+    case 'cosmos_transfer':
+      label = 'Coin transfer';
+      colorScheme = 'cyan';
+      break;
+    case 'cosmos_staking':
+      label = 'Staking';
+      colorScheme = 'green';
+      break;
+    case 'cosmos_governance':
+      label = 'Governance';
+      colorScheme = 'purple';
+      break;
+    case 'cosmos_ibc':
+      label = 'IBC';
+      colorScheme = 'teal';
       break;
     default:
       label = 'Transaction';
