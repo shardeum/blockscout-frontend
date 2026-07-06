@@ -25,6 +25,23 @@ export interface OpWithdrawal {
   status: OptimisticL2WithdrawalStatus;
 }
 
+export interface CosmosData {
+  memo: string | null;
+  denom: string | null;
+  category: string | null;
+  type: string | null;
+  fee_denom: string | null;
+  fee_amount_raw: string | null;
+  fee_amount_shm: string | null;
+  timestamp: string | null;
+  cosmos_height: number | null;
+  original_from_address: string | null;
+  original_to_address: string | null;
+  gas_wanted: number | null;
+  gas_used: number | null;
+  data: unknown;
+}
+
 export type Transaction = {
   to: AddressParam | null;
   created_contract: AddressParam | null;
@@ -64,6 +81,11 @@ export type Transaction = {
   l1_gas_price?: string;
   l1_gas_used?: string;
   has_error_in_internal_transactions: boolean | null;
+  // SDK (Cosmos) transaction fields
+  transaction_type?: 'evm' | 'cosmos';
+  cosmos_data?: CosmosData | null;
+  alt_hash?: string | null;
+  sdk_tx_hash?: string | null;
   // optimism fields
   op_withdrawals?: Array<OpWithdrawal>;
   // SUAVE fields

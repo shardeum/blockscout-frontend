@@ -115,6 +115,8 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
     return null;
   }
 
+  const isSdkTx = data.transaction_type === 'cosmos';
+
   const addressFromTags = [
     ...data.from.private_tags || [],
     ...data.from.public_tags || [],
@@ -189,6 +191,25 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         ) }
       </DetailsInfoItem.Value>
 
+      { isSdkTx && data.sdk_tx_hash && (
+        <>
+          <DetailsInfoItem.Label
+            hint="Original transaction hash as recorded on the underlying SDK (Cosmos) chain"
+            isLoading={ isLoading }
+          >
+            SDK transaction hash
+          </DetailsInfoItem.Label>
+          <DetailsInfoItem.Value>
+            <Flex flexWrap="nowrap" alignItems="center" overflow="hidden">
+              <Skeleton isLoaded={ !isLoading } overflow="hidden">
+                <HashStringShortenDynamic hash={ data.sdk_tx_hash }/>
+              </Skeleton>
+              <CopyToClipboard text={ data.sdk_tx_hash } isLoading={ isLoading }/>
+            </Flex>
+          </DetailsInfoItem.Value>
+        </>
+      ) }
+
       <DetailsInfoItem.Label
         hint="Current transaction state: Success, Failed (Error), or Pending (In Process)"
         isLoading={ isLoading }
@@ -204,6 +225,11 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         <HStack spacing={3} align="flex-start">
           <TxStatus status={ data.status } errorText={ data.status === 'error' ? data.result : undefined } isLoading={ isLoading }/>
           <ShardTxTypeTag txInput={ data.raw_input } isLoading={ isLoading } />
+          { isSdkTx && (
+            <Tag colorScheme="purple" isLoading={ isLoading }>
+              SDK Transaction
+            </Tag>
+          ) }
           { data.method && (
             <Tag colorScheme={ data.method === 'Multicall' ? 'teal' : 'gray' } isLoading={ isLoading } isTruncated>
               { data.method }
@@ -455,6 +481,11 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
             { addressFromTags }
           </Flex>
         ) }
+        { isSdkTx && data.cosmos_data?.original_from_address && (
+          <Text color="text_secondary" fontSize="sm">
+            { data.cosmos_data.original_from_address }
+          </Text>
+        ) }
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
@@ -495,6 +526,11 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
               <Flex columnGap={ 3 }>
                 { addressToTags }
               </Flex>
+            ) }
+            { isSdkTx && data.cosmos_data?.original_to_address && (
+              <Text color="text_secondary" fontSize="sm" width="100%">
+                { data.cosmos_data.original_to_address }
+              </Text>
             ) }
           </>
         ) : (
