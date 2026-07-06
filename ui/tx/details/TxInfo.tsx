@@ -23,6 +23,7 @@ import { ZKSYNC_L2_TX_BATCH_STATUSES } from 'types/api/zkSyncL2';
 import { route } from 'nextjs-routes';
 
 import config from 'configs/app';
+import { getFeaturePayload } from 'configs/app/features/types';
 import useApiQuery from 'lib/api/useApiQuery';
 import { WEI, WEI_IN_GWEI } from 'lib/consts';
 import useIsMobile from 'lib/hooks/useIsMobile';
@@ -117,6 +118,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
   }
 
   const isSdkTx = data.transaction_type === 'cosmos';
+  const cosmosSdkFeature = getFeaturePayload(config.features.cosmosSdk);
 
   const addressFromTags = [
     ...data.from.private_tags || [],
@@ -206,10 +208,10 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
                 <HashStringShortenDynamic hash={ data.sdk_tx_hash }/>
               </Skeleton>
               <CopyToClipboard text={ data.sdk_tx_hash } isLoading={ isLoading }/>
-              { config.features.cosmosSdk.isEnabled && (
+              { cosmosSdkFeature && (
                 <Skeleton isLoaded={ !isLoading } ml={ 2 }>
                   <LinkExternal
-                    href={ `${ config.features.cosmosSdk.restApiUrl }/cosmos/tx/v1beta1/txs/${ data.sdk_tx_hash }` }
+                    href={ `${ cosmosSdkFeature.restApiUrl }/cosmos/tx/v1beta1/txs/${ data.sdk_tx_hash }` }
                     variant="subtle"
                   >
                     View raw tx
