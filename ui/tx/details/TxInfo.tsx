@@ -44,6 +44,7 @@ import BlockEntity from 'ui/shared/entities/block/BlockEntity';
 import TxEntityL1 from 'ui/shared/entities/tx/TxEntityL1';
 import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 import IconSvg from 'ui/shared/IconSvg';
+import LinkExternal from 'ui/shared/links/LinkExternal';
 import LogDecodedInputData from 'ui/shared/logs/LogDecodedInputData';
 import RawInputData from 'ui/shared/RawInputData';
 import StatusTag from 'ui/shared/statusTag/StatusTag';
@@ -205,6 +206,16 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
                 <HashStringShortenDynamic hash={ data.sdk_tx_hash }/>
               </Skeleton>
               <CopyToClipboard text={ data.sdk_tx_hash } isLoading={ isLoading }/>
+              { config.features.cosmosSdk.isEnabled && (
+                <Skeleton isLoaded={ !isLoading } ml={ 2 }>
+                  <LinkExternal
+                    href={ `${ config.features.cosmosSdk.restApiUrl }/cosmos/tx/v1beta1/txs/${ data.sdk_tx_hash }` }
+                    variant="subtle"
+                  >
+                    View raw tx
+                  </LinkExternal>
+                </Skeleton>
+              ) }
             </Flex>
           </DetailsInfoItem.Value>
         </>
