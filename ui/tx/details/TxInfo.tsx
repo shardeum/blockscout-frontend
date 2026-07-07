@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Grid,
   GridItem,
@@ -165,6 +166,20 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         </GridItem>
       ) }
 
+      { isSdkTx && (
+        <GridItem colSpan={{ base: undefined, lg: 2 }}>
+          <Alert status="info" colorScheme="gray" display="inline-block" whiteSpace="pre-wrap">
+            <span>This is an SDK transaction — it originates from the Shardeum SDK layer, not the EVM, so </span>
+            <chakra.span fontWeight={ 600 }>eth_getTransactionByHash</chakra.span>
+            <span> and </span>
+            <chakra.span fontWeight={ 600 }>eth_getTransactionReceipt</chakra.span>
+            <span> will not return it. Use </span>
+            <chakra.span fontWeight={ 600 }>View raw tx</chakra.span>
+            <span> below to verify its details via the Shardeum SDK REST API.</span>
+          </Alert>
+        </GridItem>
+      ) }
+
       <DetailsInfoItem.Label
         hint="Unique character string (TxID) assigned to every verified transaction"
         isLoading={ isLoading }
@@ -197,7 +212,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
       { isSdkTx && data.sdk_tx_hash && (
         <>
           <DetailsInfoItem.Label
-            hint="Original transaction hash as recorded on the underlying SDK (Cosmos) chain"
+            hint="Original transaction hash as recorded on the underlying Shardeum SDK layer"
             isLoading={ isLoading }
           >
             SDK transaction hash
@@ -238,9 +253,13 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         <HStack spacing={3} align="flex-start">
           <TxStatus status={ data.status } errorText={ data.status === 'error' ? data.result : undefined } isLoading={ isLoading }/>
           <ShardTxTypeTag txInput={ data.raw_input } isLoading={ isLoading } />
-          { isSdkTx && (
+          { isSdkTx ? (
             <Tag colorScheme="purple" isLoading={ isLoading }>
               SDK Transaction
+            </Tag>
+          ) : (
+            <Tag colorScheme="blue" isLoading={ isLoading }>
+              EVM Transaction
             </Tag>
           ) }
           { data.method && (
@@ -484,19 +503,21 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         From
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value columnGap={ 3 }>
-        <AddressEntity
-          address={ data.from }
-          isLoading={ isLoading }
-        />
-        { data.from.name && <Text>{ data.from.name }</Text> }
-        { addressFromTags.length > 0 && (
-          <Flex columnGap={ 3 }>
-            { addressFromTags }
-          </Flex>
-        ) }
+        <Flex alignItems="center" columnGap={ 3 } flexWrap="wrap">
+          <AddressEntity
+            address={ data.from }
+            isLoading={ isLoading }
+          />
+          { data.from.name && <Text>{ data.from.name }</Text> }
+          { addressFromTags.length > 0 && (
+            <Flex columnGap={ 3 }>
+              { addressFromTags }
+            </Flex>
+          ) }
+        </Flex>
         { isSdkTx && data.cosmos_data?.original_from_address && (
-          <Text color="text_secondary" fontSize="sm">
-            { data.cosmos_data.original_from_address }
+          <Text color="text_secondary" fontSize="sm" width="100%" mt={ 1 }>
+            bech32 address: { data.cosmos_data.original_from_address }
           </Text>
         ) }
       </DetailsInfoItem.Value>
@@ -513,36 +534,38 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
       >
         { toAddress ? (
           <>
-            { data.to && data.to.hash ? (
-              <Flex flexWrap="nowrap" alignItems="center" maxW="100%">
-                <AddressEntity
-                  address={ toAddress }
-                  isLoading={ isLoading }
-                />
-                { executionSuccessBadge }
-                { executionFailedBadge }
-              </Flex>
-            ) : (
-              <Flex width="100%" whiteSpace="pre" alignItems="center" flexShrink={ 0 }>
-                <span>[Contract </span>
-                <AddressEntity
-                  address={ toAddress }
-                  isLoading={ isLoading }
-                  noIcon
-                />
-                <span>created]</span>
-                { executionSuccessBadge }
-                { executionFailedBadge }
-              </Flex>
-            ) }
-            { addressToTags.length > 0 && (
-              <Flex columnGap={ 3 }>
-                { addressToTags }
-              </Flex>
-            ) }
+            <Flex alignItems="center" columnGap={ 3 } flexWrap="wrap">
+              { data.to && data.to.hash ? (
+                <Flex flexWrap="nowrap" alignItems="center" maxW="100%">
+                  <AddressEntity
+                    address={ toAddress }
+                    isLoading={ isLoading }
+                  />
+                  { executionSuccessBadge }
+                  { executionFailedBadge }
+                </Flex>
+              ) : (
+                <Flex width="100%" whiteSpace="pre" alignItems="center" flexShrink={ 0 }>
+                  <span>[Contract </span>
+                  <AddressEntity
+                    address={ toAddress }
+                    isLoading={ isLoading }
+                    noIcon
+                  />
+                  <span>created]</span>
+                  { executionSuccessBadge }
+                  { executionFailedBadge }
+                </Flex>
+              ) }
+              { addressToTags.length > 0 && (
+                <Flex columnGap={ 3 }>
+                  { addressToTags }
+                </Flex>
+              ) }
+            </Flex>
             { isSdkTx && data.cosmos_data?.original_to_address && (
-              <Text color="text_secondary" fontSize="sm" width="100%">
-                { data.cosmos_data.original_to_address }
+              <Text color="text_secondary" fontSize="sm" width="100%" mt={ 1 }>
+                bech32 address: { data.cosmos_data.original_to_address }
               </Text>
             ) }
           </>
