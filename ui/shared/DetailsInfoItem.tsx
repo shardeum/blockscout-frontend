@@ -20,18 +20,21 @@ interface LabelProps {
   id?: string;
   hasScroll?: boolean;
   type?: 'tooltip' | 'popover';
+  alignItems?: string;
 }
 
-const Label = chakra(({ hint, children, isLoading, id, className, hasScroll, type }: LabelProps) => {
+const Label = chakra(({ hint, children, isLoading, id, className, hasScroll, type, alignItems = 'flex-start' }: LabelProps) => {
   return (
     <GridItem
       id={ id }
       className={ className }
+      display="flex"
+      alignItems={ alignItems }
       py={ 1 }
       lineHeight={{ base: 5, lg: 6 }}
       _notFirst={{ mt: { base: 3, lg: 0 } }}
     >
-      <Flex columnGap={ 2 } alignItems="flex-start">
+      <Flex columnGap={ 2 } alignItems={ alignItems }>
         { hint && (type === 'popover' ?
           <HintPopover label={ hint } isLoading={ isLoading } my={{ lg: '2px' }}/> :
           <Hint label={ hint } isLoading={ isLoading } my={{ lg: '2px' }}/>) }

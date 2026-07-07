@@ -215,6 +215,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
             <DetailsInfoItem.Label
               hint="Original transaction hash as recorded on the underlying Shardeum SDK layer"
               isLoading={ isLoading }
+              alignItems="center"
             >
               SDK transaction hash
             </DetailsInfoItem.Label>
