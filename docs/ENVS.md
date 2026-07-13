@@ -625,6 +625,16 @@ This feature is **enabled by default** with the `['metamask']` value. To switch 
 
 &nbsp;
 
+### Cosmos SDK transactions
+
+For chains that index Cosmos SDK transactions alongside EVM transactions, this configures a link to view the raw underlying SDK transaction via the chain's Cosmos REST API.
+
+| Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
+| --- | --- | --- | --- | --- | --- | --- |
+| NEXT_PUBLIC_COSMOS_REST_API_URL | `string` | Base URL of the chain's Cosmos SDK REST API, used to link to raw SDK transaction details. | - | - | `https://rest.shardeum.org` | - |
+
+&nbsp;
+
 ### Verified tokens info
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
